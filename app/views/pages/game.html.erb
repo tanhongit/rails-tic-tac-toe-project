@@ -214,10 +214,25 @@
     }
 
     function setScoreText() {
-       
+        scoreText.innerHTML = `${score[0]} Wins | ${score[1]} Losses | ${score[2]} Ties`;
     }
 
     function updateScores(result) {
-       
+        var formData = new FormData();
+        switch (result) {
+            case human:
+                formData.append("win", 1);
+                break;
+            case computer:
+                formData.append("loss", 1);
+                break;
+            default:
+                formData.append("tie", 1);
+                break;
+        }
+        formData.append("authenticity_token", "<%= form_authenticity_token %>");
+        var request = new XMLHttpRequest();
+        request.open("POST", "http://localhost:3000/played");
+        request.send(formData);
     }
 </script>
