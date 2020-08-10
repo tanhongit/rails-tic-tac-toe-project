@@ -15,6 +15,7 @@
     var nodeWidth;
     var nodeHeight;
     var resultText = document.getElementById("result");
+    var scoreText = document.getElementById("scoreText");
     var canvasOffset = resultText.getBoundingClientRect().bottom;
     var winner;
     var gameInProgress;
@@ -32,9 +33,11 @@
             ['', '', ''],
             ['', '', '']
         ]
+        board[1][0] = human;
         available = board;
         currentPlayer = random([human, computer]);
         gameInProgress = true;
+        loop();
     }
 
     function setup() {
@@ -234,5 +237,15 @@
         var request = new XMLHttpRequest();
         request.open("POST", "http://localhost:3000/played");
         request.send(formData);
+    }
+
+    function moveAvailable(iPos, jPos) {
+        let result;
+        if (iPos > 2 || jPos > 2 || iPos < 0 || jPos < 0) {
+            result = false;
+        } else {
+            result = board[iPos][jPos] === '';
+        }
+        return result;
     }
 </script>
