@@ -120,5 +120,29 @@
         return a == b && b == c && a != '';
     }
 
-    function checkWinner() {}
+    function checkWinner() {
+        winner = null;
+        let openSpots = 0;
+        let result;
+
+        // Horizontal Check
+        for (let i = 0; i < 3; i++) {
+            if (equals3(board[i][0], board[i][1], board[i][2])) {
+                winner = board[i][0];
+            }
+        }
+        // Vertical Check
+        for (let j = 0; j < 3; j++) {
+            if (equals3(board[0][j], board[1][j], board[2][j])) {
+                winner = board[0][j];
+            }
+        }
+        // Diagonal Checks
+        if (equals3(board[0][0], board[1][1], board[2][2])) {
+            winner = board[0][0];
+        }
+        if (equals3(board[2][0], board[1][1], board[0][2])) {
+            winner = board[2][0];
+        }
+    }
 </script>
