@@ -69,5 +69,56 @@
     function draw() {
         background(220);
         drawGrid();
+
+        strokeWeight(4);
+
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                // if i = 0, x = 0 + 
+                let x = nodeWidth * i + nodeWidth / 2;
+                let y = nodeHeight * j + nodeHeight / 2;
+                let spot = board[i][j]
+                let xRadius = nodeWidth / 4;
+                let yRadius = nodeHeight / 4;
+
+                if (spot == human) {
+                    noFill();
+                    ellipse(x, y, nodeWidth / 2, nodeHeight / 2);
+                } else if (spot == computer) {
+                    line(x - xRadius, y - yRadius, x + xRadius, y + yRadius);
+                    line(x + xRadius, y - yRadius, x - xRadius, y + yRadius)
+                }
+            }
+        }
+        if (gameInProgress && checkWinner() && currentPlayer == computer) {
+            nextTurn();
+        }
     }
+
+    function mousePressed() {
+        if (gameInProgress && checkWinner() && currentPlayer == human) {
+            if (mouseX >= 0 && mouseY >= 0 && mouseX <= width && mouseY <= height) {
+                let i = floor(mouseX / nodeWidth);
+                let j = floor(mouseY / nodeHeight);
+                if (moveAvailable(i, j)) {
+                    board[i][j] = human;
+                    currentPlayer = computer;
+                }
+            }
+        }
+    }
+
+    function keyReleased() {
+        // spacebar = key 32 -> 
+        if (keyCode === 32) {
+            newGame();
+        }
+    }
+
+    // for check win
+    function equals3(a, b, c) {
+        return a == b && b == c && a != '';
+    }
+
+    function checkWinner() {}
 </script>
