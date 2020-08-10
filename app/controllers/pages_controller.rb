@@ -8,7 +8,7 @@ class PagesController < ApplicationController
   end
 
   def hiscores
-    @users = User.order('wins DESC')
+    @users = User.order('win DESC')
   end
 
   def played
