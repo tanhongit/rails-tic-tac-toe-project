@@ -24,8 +24,19 @@
         parseInt("<%= @ties %>")
     ];
 
-    function newGame() {}
-    
+    function newGame() {
+        noLoop();
+        resultText.innerHTML = "";
+        board = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ]
+        available = board;
+        currentPlayer = random([human, computer]);
+        gameInProgress = true;
+    }
+
     function setup() {
         canvas = createCanvas(windowWidth, windowHeight - canvasOffset * 2);
         nodeWidth = width / 3;
