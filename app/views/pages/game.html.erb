@@ -177,4 +177,47 @@
             return false;
         }
     }
+
+    function nextTurn() {
+        if (currentPlayer == computer) {
+            let available = [];
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (moveAvailable(i, j)) {
+                        available.push({
+                            i,
+                            j
+                        })
+                    }
+                }
+            }
+            let move = random(available);
+            board[move.i][move.j] = computer;
+            currentPlayer = human;
+        }
+    }
+
+    function setScore(result) {
+        switch (result) {
+            case human:
+                score[0] += 1;
+                break;
+            case computer:
+                score[1] += 1;
+                break;
+            default:
+                score[2] += 1;
+                break;
+        }
+        setScoreText();
+        updateScores(result);
+    }
+
+    function setScoreText() {
+       
+    }
+
+    function updateScores(result) {
+       
+    }
 </script>
