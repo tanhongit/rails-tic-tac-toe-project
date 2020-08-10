@@ -158,5 +158,23 @@
         } else {
             result = winner;
         }
+
+        if (result !== null) {
+            noLoop();
+            gameInProgress = false;
+            currentPlayer = null;
+            if (result == 'tie') {
+                resultText.innerHTML = 'Tie!';
+            } else {
+                resultText.innerHTML = `${result} You Win!`;
+            }
+            setScore(result);
+        }
+
+        if (result === null) {
+            return true;
+        } else {
+            return false;
+        }
     }
 </script>
