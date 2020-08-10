@@ -144,5 +144,19 @@
         if (equals3(board[2][0], board[1][1], board[0][2])) {
             winner = board[2][0];
         }
+
+        for (let i = 0; i < 3; i++) {
+            for (let j = 0; j < 3; j++) {
+                if (board[i][j] == '') {
+                    openSpots++;
+                }
+            }
+        }
+
+        if (winner == null && openSpots == 0) {
+            result = 'tie';
+        } else {
+            result = winner;
+        }
     }
 </script>
