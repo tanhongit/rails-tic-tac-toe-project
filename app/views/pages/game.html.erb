@@ -1,2 +1,9 @@
-<h1>Pages#game</h1>
-<p>Find me in app/views/pages/game.html.erb</p>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.0.0/p5.min.js"></script>
+<div class="container" style="text-align: center">
+    <h1 id="scoreText" style="text-align: center">
+        <%= pluralize(@wins, "Win") %> | <%= pluralize(@losses, "Loss") %> | <%= pluralize(@ties, "Tie") %>
+    </h1>
+    <div style="font-size: 32px" id="result"></div>
+</div>
+<script>
+</script>
