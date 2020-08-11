@@ -5,6 +5,7 @@
     </h1>
     <div style="font-size: 32px" id="result"></div>
 </div>
+
 <script>
     var canvas;
     var board;
@@ -33,7 +34,6 @@
             ['', '', ''],
             ['', '', '']
         ]
-        board[1][0] = human;
         available = board;
         currentPlayer = random([human, computer]);
         gameInProgress = true;
