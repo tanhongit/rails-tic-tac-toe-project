@@ -4,13 +4,16 @@
         
 
         <% if current_user %>
-        <%= link_to "Play A Game!", game_path %>
+        <%= link_to "Play Rank AI Game!", game_path, class:'custom-btn btn-5' %>
+        <br /><br />
+        <%= link_to "Hiscores Rank AI Game!", hiscores_path, class:'custom-btn btn-5' %>
         <br />
-        <%= link_to "Logout", destroy_user_session_path, method: :delete %>
+        <hr>
+        <%= link_to "Logout", destroy_user_session_path, class:'custom-btn btn-4', method: :delete %>
         <% else %>
-        <%= link_to "Create An Account", new_user_registration_path %>
-        <br />
-        <%= link_to "Login", new_user_session_path %>
+        <%= link_to "Create An Account", new_user_registration_path,  class:'custom-btn btn-5' %>
+        <br /><br />
+        <%= link_to "Login", new_user_session_path, class:'custom-btn btn-4' %>
         <% end %>
     </div>
 </div>
