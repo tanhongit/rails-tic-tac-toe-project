@@ -108,7 +108,7 @@
             for (let j = 0; j < 3; j++) {
                 if (moveAvailable(i, j)) {
                     board[i][j] =computer;
-                    let score = minimax(board, 0, true)
+                    let score = minimax(board, 0, false)
                     board[i][j] ='';
                     if(score>bestScore){
                         bestScore = score;
@@ -122,10 +122,48 @@
         currentPlayer = human;
     }
 
-    function minimax(board, depth, isMaximizing){
-        return 1;
+    let scores = {
+        X: 1, 
+        O: -1,
+        tie: 0
     }
-    
+
+    function minimax(board, depth, isMaximizing){
+        return 1;let result = checkWinner();
+        if(result !== null){
+            let score = scores[result];
+            return score;
+        }
+
+        if(isMaximizing){
+            let bestScore = -Infinity;
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if(board[i][j]==''){
+                        board[i][j]=computer;
+                        let score = minimax(board,depth+1,false)
+                        board[i][j]='';
+                        bestScore = max(score,bestScore);
+                    }
+                }
+            }
+            return bestScore;
+        }else {
+            let bestScore = Infinity;
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if(board[i][j]==''){
+                        board[i][j]=human;
+                        let score = minimax(board,depth+1,true)
+                        board[i][j]='';
+                        bestScore = min(score,bestScore);
+                    }
+                }
+                
+            }
+            return bestScore;
+        }
+    }
     function moveAvailable(iPos, jPos) {
         let result;
         if (iPos > 2 || jPos > 2 || iPos < 0 || jPos < 0) {
@@ -209,13 +247,6 @@
             } else {
                 resultText.innerHTML = `${result} Win!`;
             }
-            setScore(result);
-        }
-
-        if (result === null) {
-            return true;
-        } else {
-            return false;
         }
     }
 
