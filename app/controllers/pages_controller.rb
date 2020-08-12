@@ -18,6 +18,8 @@ class PagesController < ApplicationController
     current_user.save
   end
 
+  def invincible 
+  end
   private
 
   def set_stats
