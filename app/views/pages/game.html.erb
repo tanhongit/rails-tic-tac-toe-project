@@ -12,7 +12,7 @@
     var human = 'O';
     var computer = 'X';
     var currentPlayer;
-    var available = [];
+    var available = [];// for location available
     var nodeWidth;
     var nodeHeight;
     var resultText = document.getElementById("result");
@@ -35,13 +35,17 @@
             ['', '', '']
         ]
         available = board;
+        //random start
         currentPlayer = random([human, computer]);
         gameInProgress = true;
         loop();
     }
 
     function setup() {
-        canvas = createCanvas(windowWidth, windowHeight - canvasOffset * 2);
+        //SETUP WIDTH HEIGHT CANVAS TICTACTOE
+        // canvas = createCanvas(windowWidth, windowHeight - canvasOffset * 2);
+        canvas = createCanvas(600,600);
+        textFont("Comic Sans MS");
         nodeWidth = width / 3;
         nodeHeight = height / 3;
         centerCanvas();
@@ -62,6 +66,7 @@
         drawGrid();
     }
 
+    // The ticks of horizontal and vertical lines form the grid table
     function drawGrid() {
         line(nodeWidth, 0, nodeWidth, height);
         line(nodeWidth * 2, 0, nodeWidth * 2, height);
@@ -70,9 +75,9 @@
     }
 
     function draw() {
-        background(220);
-        drawGrid();
-
+        background(220);// background color
+        drawGrid();//call gird table
+    
         strokeWeight(4);
 
         for (let i = 0; i < 3; i++) {
@@ -83,10 +88,10 @@
                 let spot = board[i][j]
                 let xRadius = nodeWidth / 4;
                 let yRadius = nodeHeight / 4;
-
+                strokeWeight(4);
                 if (spot == human) {
                     noFill();
-                    ellipse(x, y, nodeWidth / 2, nodeHeight / 2);
+                    ellipse(x, y, nodeWidth / 2);
                 } else if (spot == computer) {
                     line(x - xRadius, y - yRadius, x + xRadius, y + yRadius);
                     line(x + xRadius, y - yRadius, x - xRadius, y + yRadius)
@@ -94,8 +99,37 @@
             }
         }
         if (gameInProgress && checkWinner() && currentPlayer == computer) {
-            nextTurn();
+            nextTurn(); // each time a draw is passed, the function is called
         }
+    }
+
+    function nextTurn() {
+        if (currentPlayer == computer) {
+            let available = [];
+            for (let i = 0; i < 3; i++) {
+                for (let j = 0; j < 3; j++) {
+                    if (moveAvailable(i, j)) {
+                        available.push({
+                            i,
+                            j
+                        })
+                    }
+                }
+            }
+            let move = random(available);
+            board[move.i][move.j] = computer;
+            currentPlayer = human;
+        }
+    }
+
+    function moveAvailable(iPos, jPos) {
+        let result;
+        if (iPos > 2 || jPos > 2 || iPos < 0 || jPos < 0) {
+            result = false;
+        } else {
+            result = board[iPos][jPos] === '';
+        }
+        return result;
     }
 
     function mousePressed() {
@@ -169,7 +203,7 @@
             if (result == 'tie') {
                 resultText.innerHTML = 'Tie!';
             } else {
-                resultText.innerHTML = `${result} You Win!`;
+                resultText.innerHTML = `${result} Win!`;
             }
             setScore(result);
         }
@@ -178,25 +212,6 @@
             return true;
         } else {
             return false;
-        }
-    }
-
-    function nextTurn() {
-        if (currentPlayer == computer) {
-            let available = [];
-            for (let i = 0; i < 3; i++) {
-                for (let j = 0; j < 3; j++) {
-                    if (moveAvailable(i, j)) {
-                        available.push({
-                            i,
-                            j
-                        })
-                    }
-                }
-            }
-            let move = random(available);
-            board[move.i][move.j] = computer;
-            currentPlayer = human;
         }
     }
 
@@ -237,15 +252,5 @@
         var request = new XMLHttpRequest();
         request.open("POST", "http://localhost:3000/played");
         request.send(formData);
-    }
-
-    function moveAvailable(iPos, jPos) {
-        let result;
-        if (iPos > 2 || jPos > 2 || iPos < 0 || jPos < 0) {
-            result = false;
-        } else {
-            result = board[iPos][jPos] === '';
-        }
-        return result;
     }
 </script>
