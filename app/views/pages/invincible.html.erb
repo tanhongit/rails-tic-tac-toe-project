@@ -117,7 +117,6 @@
                 }
             }
         }
-        // let move = random(available);
         board[move.i][move.j] = computer;
         currentPlayer = human;
     }
@@ -129,7 +128,7 @@
     }
 
     function minimax(board, depth, isMaximizing){
-        return 1;let result = checkWinner();
+        let result = checkWinner();
         if(result !== null){
             let score = scores[result];
             return score;
@@ -247,6 +246,12 @@
             } else {
                 resultText.innerHTML = `${result} Win!`;
             }
+        }
+
+        if (result === null) {
+            return true;
+        } else {
+            return false;
         }
     }
 
