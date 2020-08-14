@@ -3,8 +3,9 @@
     <h1 id="scoreText" style="text-align: center">
         <%= pluralize(@wins, "Win") %> | <%= pluralize(@losses, "Loss") %> | <%= pluralize(@ties, "Tie") %>
     </h1>
-    <div style="font-size: 32px" id="result"></div>
+    <div style="font-size: 32px; padding: 15px;" id="result"></div>
     <button class='custom-btn btn-5' onClick="newGame()" data-title="Replay Tic Tac Toe">Replay Tic Tac Toe</button>
+    <div style="font-size: 32px;" id="result2"></div>
 </div>
 
 <script>
@@ -17,6 +18,7 @@
     var nodeWidth;
     var nodeHeight;
     var resultText = document.getElementById("result");
+    var result2Text = document.getElementById("result2");
     var scoreText = document.getElementById("scoreText");
     var canvasOffset = resultText.getBoundingClientRect().bottom;
     var winner;
@@ -29,7 +31,7 @@
 
     function newGame() {
         noLoop();
-        resultText.innerHTML = "";
+        resultText.innerHTML = "No winner yet";
         board = [
             ['', '', ''],
             ['', '', ''],
@@ -46,7 +48,6 @@
         //SETUP WIDTH HEIGHT CANVAS TICTACTOE
         // canvas = createCanvas(windowWidth, windowHeight - canvasOffset * 2);
         canvas = createCanvas(600,600);
-        textFont("Comic Sans MS");
         nodeWidth = width / 3;
         nodeHeight = height / 3;
         centerCanvas();
@@ -78,7 +79,7 @@
     function draw() {
         background(220);// background color
         drawGrid();//call gird table
-    
+        updateText();
         strokeWeight(4);
 
         for (let i = 0; i < 3; i++) {
@@ -102,6 +103,11 @@
         if (gameInProgress && checkWinner() && currentPlayer == computer) {
             nextTurn(); // each time a draw is passed, the function is called
         }
+         
+    }
+
+    function updateText() {
+        result2Text.innerHTML = currentPlayer + "'s Turn";
     }
 
     function nextTurn() {
@@ -251,7 +257,7 @@
         }
         formData.append("authenticity_token", "<%= form_authenticity_token %>");
         var request = new XMLHttpRequest();
-        request.open("POST", "https://railstictactoe.herokuapp.com/played");
+        request.open("POST", "https://railstictactoe.herokuapp.com/played"); //Change your host link, ex: http://localhost:3000/played
         request.send(formData);
     }
 </script>

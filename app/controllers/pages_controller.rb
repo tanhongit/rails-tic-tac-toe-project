@@ -1,5 +1,5 @@
 class PagesController < ApplicationController
-  before_action :authenticate_user!, except: %i[home hiscores invincible]
+  before_action :authenticate_user!, except: %i[home hiscores invincible twoplayers]
   before_action :set_stats, only: %i[game]
   def home
   end
@@ -19,6 +19,9 @@ class PagesController < ApplicationController
   end
 
   def invincible 
+  end
+
+  def twoplayers
   end
   private
 
