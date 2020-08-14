@@ -46,7 +46,7 @@
   function setup() {
       //SETUP WIDTH HEIGHT CANVAS TICTACTOE
       // canvas = createCanvas(windowWidth, windowHeight - canvasOffset * 2);
-      canvas = createCanvas(600,600);
+      canvas = createCanvas(400,400);
       nodeWidth = width / 3;
       nodeHeight = height / 3;
       centerCanvas();
@@ -79,7 +79,7 @@
       background(220);// background color
       drawGrid();//call gird table
       updateText();
-      strokeWeight(4);
+      strokeWeight(5);
   
       for (let i = 0; i < 3; i++) {
           for (let j = 0; j < 3; j++) {
@@ -89,7 +89,6 @@
               let spot = board[i][j]
               let xRadius = nodeWidth / 4;
               let yRadius = nodeHeight / 4;
-              strokeWeight(4);
               if (spot == human) {
                   noFill();
                   ellipse(x, y, nodeWidth / 2);
