@@ -5,7 +5,10 @@
   </h1>
   <div style="font-size: 32px; color:red;font-weight:bold;" id="result"></div>
   <button class='custom-btn btn-5' onClick="newGame()" data-title="Replay Tic Tac Toe">Replay Tic Tac Toe</button>
-  <div style="font-size: 32px" id="turn_player"></div>
+  <div style="font-size: 32px" id="turn_player"></div><br>
+  <button class='custom-btn btn-5' onClick="addSize()" data-title="Replay Tic Tac Toe">Add Rows/Cols (Max 15)</button>
+  <button class='custom-btn btn-5' onClick="subSize()" data-title="Replay Tic Tac Toe">Sub Rows/Cols (Min 2)</button>
+  <span style="font-size: 32px;" id="size"></span>
 </div>
 <script>
   let boardSize = 3;
@@ -17,6 +20,7 @@
   let h;
   var resultText = document.getElementById("result");
   var turnText = document.getElementById("turn_player");
+  var sizeText = document.getElementById("size");
   var canvasOffset = resultText.getBoundingClientRect().bottom;
   let winner = null
   let isloop = true
@@ -26,7 +30,7 @@
   
     w = width/boardSize;
     h = height/boardSize;
-  centerCanvas();
+    centerCanvas();
     initLabels()
   
     for(let i=0; i<boardSize; ++i) {
@@ -45,23 +49,15 @@
     // newGameBtn.position(width+30, 150);
     // newGameBtn.mousePressed(newGame);
   
-    sizeInc = createButton('Add Rows/Cols (Max 15)');
-    sizeInc.position(width+15, 200);
-    sizeInc.mousePressed(addSize);
+    // sizeInc = createButton('Add Rows/Cols (Max 15)');
+    // sizeInc.position(width+15, 200);
+    // sizeInc.mousePressed(addSize);
   
-    sizeDec = createButton('Sub Rows/Cols (Min 2)');
-    sizeDec.position(width+20, 250);
-    sizeDec.mousePressed(subSize);
-  
-    sizeP = createP('Size: '+boardSize).style('background-color', '#FFF').style('font-size', '20px').style('padding', '5px')
-    sizeP.position(width+70, 150);
-  
+    // sizeDec = createButton('Sub Rows/Cols (Min 2)');
+    // sizeDec.position(width+20, 250);
+    // sizeDec.mousePressed(subSize);
     currentPlayer = 1
-  
     turnText.innerHTML = players[currentPlayer] + "'s Turn";
-  
-    // winnerP = createP('No winner yet').style('background-color', '#FFF').style('font-size', '25px').style('padding', '5px')
-    // winnerP.position(width+30, 250);
     resultText.innerHTML = '';
   }
   
@@ -84,8 +80,16 @@
     winner = null
     isloop = true
   
-    resultText.innerHTML = ''; // winnerP.html('No winner yet')
+    resultText.innerHTML = '';
+    sizeText.innerHTML = ('Size: '+boardSize)
     loop();
+  }
+
+  function keyReleased() {
+      // spacebar = key 32 ->
+      if (keyCode === 32 || keyCode === 13 || keyCode === 16 || keyCode === 17 || keyCode === 88 || keyCode === 9 || keyCode === 27 || keyCode === 46) {
+          newGame();
+      }
   }
   
   function addSize() {
@@ -193,7 +197,6 @@
       stroke(0)
       return temp;
     }
-  
     for(let i=0; i<boardSize; ++i) {
       for(let j=0; j<boardSize; ++j) {
         if(board[i][j] == '') return null;
@@ -213,7 +216,6 @@
   }
   
   function updateText() {
-    sizeP.html('Size: '+boardSize)
     turnText.innerHTML = (players[currentPlayer] + "'s Turn")
   }
   
@@ -239,13 +241,11 @@
       line(0, h * 2, width, h * 2);
   }
   
-  
   function draw() {
     if(isloop) {
       background(220);
       drawGrid();
       updateText();
-  
       strokeWeight(4);
       noFill();
   
@@ -260,7 +260,6 @@
           let y=(h*i)+(h/2);
           let xr = w/4;
           let yr = h/4;
-  
           if(board[i][j]=='X') {
             line(x-xr, y-yr, x+xr, y+yr);
             line(x+xr, y-yr, x-xr, y+yr);
@@ -275,7 +274,7 @@
       winner = isWinner();
       if(winner) {
         if(winner == 'TIE')
-          winnerP.html(winner);
+          resultText.innerHTML = (winner);
         else
           resultText.innerHTML = (winner + ' is Winner');
         isloop = false
