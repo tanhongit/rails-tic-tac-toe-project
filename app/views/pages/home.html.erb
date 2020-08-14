@@ -1,19 +1,19 @@
 <div class="container mt-5">
-    <div class="jumbotron" style="text-align:center">
-        <h1>Tic Tac Toe</h1>
-        
-
-        <% if current_user %>
-        <%= link_to "Play Rank AI Game!", game_path, class:'custom-btn btn-5' %>
-        <br /><br />
-        <%= link_to "Hiscores Rank AI Game!", hiscores_path, class:'custom-btn btn-5' %>
-        <br />
-        <hr>
-        <%= link_to "Logout", destroy_user_session_path, class:'custom-btn btn-4', method: :delete %>
-        <% else %>
-        <%= link_to "Create An Account", new_user_registration_path,  class:'custom-btn btn-5' %>
-        <br /><br />
-        <%= link_to "Login", new_user_session_path, class:'custom-btn btn-4' %>
-        <% end %>
-    </div>
+  <div class="jumbotron" style="text-align:center">
+    <h1>Tic Tac Toe</h1>
+    <% if current_user %>
+      <%= link_to "Play Rank AI Game!", game_path, class:'custom-btn btn-5' %>
+      <br />
+      <br />
+      <%= link_to "Hiscores Rank AI Game!", hiscores_path, class:'custom-btn btn-5' %>
+      <br />
+      <hr>
+      <%= link_to "Logout", destroy_user_session_path, class:'custom-btn btn-4', method: :delete %>
+    <% else %>
+      <%= link_to "Create An Account", new_user_registration_path,  class:'custom-btn btn-5' %>
+      <br />
+      <br />
+      <%= link_to "Login", new_user_session_path, class:'custom-btn btn-4' %>
+    <% end %>
+  </div>
 </div>

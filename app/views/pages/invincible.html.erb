@@ -5,256 +5,185 @@
 </div>
 
 <script>
-    var canvas;
-    var board;
-    var human = 'O';
-    var computer = 'X';
-    var currentPlayer;
-    var available = [];// for location available
-    var nodeWidth;
-    var nodeHeight;
-    var resultText = document.getElementById("result");
-    var scoreText = document.getElementById("scoreText");
-    var canvasOffset = resultText.getBoundingClientRect().bottom;
-    var winner;
-    var gameInProgress;
-    var score = [
-        parseInt("<%= @wins %>"),
-        parseInt("<%= @losses %>"),
-        parseInt("<%= @ties %>")
-    ];
+    let board = [
+  ['', '', ''],
+  ['', '', ''],
+  ['', '', '']
+];
 
-    function newGame() {
-        noLoop();
-        resultText.innerHTML = "";
-        board = [
-            ['', '', ''],
-            ['', '', ''],
-            ['', '', '']
-        ]
-        available = board;
-        //random start
-        currentPlayer = random([human, computer]);
-        gameInProgress = true;
-        loop();
+let w; // = width / 3;
+let h; // = height / 3;
+
+let ai = 'X';
+let human = 'O';
+let currentPlayer = human;
+
+function setup() {
+  createCanvas(400, 400);
+  w = width / 3;
+  h = height / 3;
+  bestMove();
+}
+
+function equals3(a, b, c) {
+  return a == b && b == c && a != '';
+}
+
+function checkWinner() {
+  let winner = null;
+
+  // horizontal
+  for (let i = 0; i < 3; i++) {
+    if (equals3(board[i][0], board[i][1], board[i][2])) {
+      winner = board[i][0];
     }
+  }
 
-    function setup() {
-        //SETUP WIDTH HEIGHT CANVAS TICTACTOE
-        // canvas = createCanvas(windowWidth, windowHeight - canvasOffset * 2);
-        canvas = createCanvas(600,600);
-        textFont("Comic Sans MS");
-        nodeWidth = width / 3;
-        nodeHeight = height / 3;
-        centerCanvas();
-        newGame();
+  // Vertical
+  for (let i = 0; i < 3; i++) {
+    if (equals3(board[0][i], board[1][i], board[2][i])) {
+      winner = board[0][i];
     }
+  }
 
-    function centerCanvas() {
-        var canvasX = (windowWidth - width) / 2;
-        var canvasY = (windowHeight - height) / 2 + canvasOffset;
-        canvas.position(canvasX, canvasY);
+  // Diagonal
+  if (equals3(board[0][0], board[1][1], board[2][2])) {
+    winner = board[0][0];
+  }
+  if (equals3(board[2][0], board[1][1], board[0][2])) {
+    winner = board[2][0];
+  }
+
+  let openSpots = 0;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (board[i][j] == '') {
+        openSpots++;
+      }
     }
+  }
 
-    function windowResized() {
-        resizeCanvas(windowWidth, windowHeight - canvasOffset * 2);
-        nodeWidth = width / 3;
-        nodeHeight = height / 3;
-        centerCanvas();
-        drawGrid();
+  if (winner == null && openSpots == 0) {
+    return 'tie';
+  } else {
+    return winner;
+  }
+}
+
+function mousePressed() {
+  if (currentPlayer == human) {
+    // Human make turn
+    let i = floor(mouseX / w);
+    let j = floor(mouseY / h);
+    // If valid turn
+    if (board[i][j] == '') {
+      board[i][j] = human;
+      currentPlayer = ai;
+      bestMove();
     }
+  }
+}
 
-    // The ticks of horizontal and vertical lines form the grid table
-    function drawGrid() {
-        line(nodeWidth, 0, nodeWidth, height);
-        line(nodeWidth * 2, 0, nodeWidth * 2, height);
-        line(0, nodeHeight, width, nodeHeight);
-        line(0, nodeHeight * 2, width, nodeHeight * 2);
+function draw() {
+  background(220);
+  strokeWeight(4);
+
+  line(w, 0, w, height);
+  line(w * 2, 0, w * 2, height);
+  line(0, h, width, h);
+  line(0, h * 2, width, h * 2);
+
+  for (let j = 0; j < 3; j++) {
+    for (let i = 0; i < 3; i++) {
+      let x = w * i + w / 2;
+      let y = h * j + h / 2;
+      let spot = board[i][j];
+      textSize(32);
+      let r = w / 4;
+      if (spot == human) {
+        noFill();
+        ellipse(x, y, r * 2);
+      } else if (spot == ai) {
+        line(x - r, y - r, x + r, y + r);
+        line(x + r, y - r, x - r, y + r);
+      }
     }
+  }
 
-    function draw() {
-        background(220);// background color
-        drawGrid();//call gird table
-    
-        strokeWeight(4);
-
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                // if i = 0, x = 0 + 
-                let x = nodeWidth * i + nodeWidth / 2;
-                let y = nodeHeight * j + nodeHeight / 2;
-                let spot = board[i][j]
-                let xRadius = nodeWidth / 4;
-                let yRadius = nodeHeight / 4;
-                strokeWeight(4);
-                if (spot == human) {
-                    noFill();
-                    ellipse(x, y, nodeWidth / 2);
-                } else if (spot == computer) {
-                    line(x - xRadius, y - yRadius, x + xRadius, y + yRadius);
-                    line(x + xRadius, y - yRadius, x - xRadius, y + yRadius)
-                }
-            }
-        }
-        if (gameInProgress && checkWinner() && currentPlayer == computer) {
-            nextTurn(); // each time a draw is passed, the function is called
-        }
+  let result = checkWinner();
+  if (result != null) {
+    noLoop();
+    let resultP = createP('');
+    resultP.style('font-size', '32pt');
+    if (result == 'tie') {
+      resultP.html('Tie!');
+    } else {
+      resultP.html(`${result} wins!`);
     }
-
-    function nextTurn() {
-        let bestScore = -Infinity;
-        let move;
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                if (moveAvailable(i, j)) {
-                    board[i][j] =computer;
-                    let score = minimax(board, 0, false)
-                    board[i][j] ='';
-                    if(score>bestScore){
-                        bestScore = score;
-                        move = {i,j};
-                    }
-                }
-            }
+  }
+}
+function bestMove() {
+  // AI to make its turn
+  let bestScore = -Infinity;
+  let move;
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      // Is the spot available?
+      if (board[i][j] == '') {
+        board[i][j] = ai;
+        let score = minimax(board, 0, false);
+        board[i][j] = '';
+        if (score > bestScore) {
+          bestScore = score;
+          move = { i, j };
         }
-        board[move.i][move.j] = computer;
-        currentPlayer = human;
+      }
     }
+  }
+  board[move.i][move.j] = ai;
+  currentPlayer = human;
+}
 
-    let scores = {
-        X: 1, 
-        O: -1,
-        tie: 0
+let scores = {
+  X: 10,
+  O: -10,
+  tie: 0
+};
+
+function minimax(board, depth, isMaximizing) {
+  let result = checkWinner();
+  if (result !== null) {
+    return scores[result];
+  }
+
+  if (isMaximizing) {
+    let bestScore = -Infinity;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        // Is the spot available?
+        if (board[i][j] == '') {
+          board[i][j] = ai;
+          let score = minimax(board, depth + 1, false);
+          board[i][j] = '';
+          bestScore = max(score, bestScore);
+        }
+      }
     }
-
-    function minimax(board, depth, isMaximizing){
-        let result = checkWinner();
-        if(result !== null){
-            let score = scores[result];
-            return score;
+    return bestScore;
+  } else {
+    let bestScore = Infinity;
+    for (let i = 0; i < 3; i++) {
+      for (let j = 0; j < 3; j++) {
+        // Is the spot available?
+        if (board[i][j] == '') {
+          board[i][j] = human;
+          let score = minimax(board, depth + 1, true);
+          board[i][j] = '';
+          bestScore = min(score, bestScore);
         }
-
-        if(isMaximizing){
-            let bestScore = -Infinity;
-            for (let i = 0; i < 3; i++) {
-                for (let j = 0; j < 3; j++) {
-                    if(board[i][j]==''){
-                        board[i][j]=computer;
-                        let score = minimax(board,depth+1,false)
-                        board[i][j]='';
-                        bestScore = max(score,bestScore);
-                    }
-                }
-            }
-            return bestScore;
-        }else {
-            let bestScore = Infinity;
-            for (let i = 0; i < 3; i++) {
-                for (let j = 0; j < 3; j++) {
-                    if(board[i][j]==''){
-                        board[i][j]=human;
-                        let score = minimax(board,depth+1,true)
-                        board[i][j]='';
-                        bestScore = min(score,bestScore);
-                    }
-                }
-                
-            }
-            return bestScore;
-        }
+      }
     }
-    function moveAvailable(iPos, jPos) {
-        let result;
-        if (iPos > 2 || jPos > 2 || iPos < 0 || jPos < 0) {
-            result = false;
-        } else {
-            result = board[iPos][jPos] === '';
-        }
-        return result;
-    }
-
-    function mousePressed() {
-        if (gameInProgress && checkWinner() && currentPlayer == human) {
-            if (mouseX >= 0 && mouseY >= 0 && mouseX <= width && mouseY <= height) {
-                let i = floor(mouseX / nodeWidth);
-                let j = floor(mouseY / nodeHeight);
-                if (moveAvailable(i, j)) {
-                    board[i][j] = human;
-                    currentPlayer = computer;
-                }
-            }
-        }
-    }
-
-    function keyReleased() {
-        // spacebar = key 32 -> 
-        if (keyCode === 32 || keyCode === 13 || keyCode === 16 || keyCode === 17 || keyCode === 88 || keyCode === 9 || keyCode === 27 || keyCode === 46) {
-            newGame();
-        }
-    }
-
-    // for check win
-    function equals3(a, b, c) {
-        return a == b && b == c && a != '';
-    }
-
-    function checkWinner() {
-        winner = null;
-        let openSpots = 0;
-        let result;
-
-        // Horizontal Check
-        for (let i = 0; i < 3; i++) {
-            if (equals3(board[i][0], board[i][1], board[i][2])) {
-                winner = board[i][0];
-            }
-        }
-        // Vertical Check
-        for (let j = 0; j < 3; j++) {
-            if (equals3(board[0][j], board[1][j], board[2][j])) {
-                winner = board[0][j];
-            }
-        }
-        // Diagonal Checks
-        if (equals3(board[0][0], board[1][1], board[2][2])) {
-            winner = board[0][0];
-        }
-        if (equals3(board[2][0], board[1][1], board[0][2])) {
-            winner = board[2][0];
-        }
-
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                if (board[i][j] == '') {
-                    openSpots++;
-                }
-            }
-        }
-
-        if (winner == null && openSpots == 0) {
-            result = 'tie';
-        } else {
-            result = winner;
-        }
-
-        if (result !== null) {
-            noLoop();
-            gameInProgress = false;
-            currentPlayer = null;
-            if (result == 'tie') {
-                resultText.innerHTML = 'Tie!';
-            } else {
-                resultText.innerHTML = `${result} Win!`;
-            }
-        }
-
-        if (result === null) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    // Since this is a game using AI that is always invincible, there is no need to save the user's score at this level.
-   
+    return bestScore;
+  }
+}
 </script>

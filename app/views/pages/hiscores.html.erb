@@ -1,14 +1,13 @@
 <div class="container">
-    <div class="jumbotron">
-        <h1 style="text-align:center">
-            All Time High Scores
-        </h1>
-
-        <% @users.each.with_index do |user, index| %>
-        <p>
-            <span style='font-weight:bold;'>Rank #<%= index + 1 %>:</span> <span style='font-weight:bold;color:red;'><%= user.username %></span> has won <span style='font-weight:bold;color:blue;'><%= pluralize(user.win, "Game") %></span>
-            out of <span style='font-weight:bold;color:blue;'><%= pluralize(user.win + user.losses + user.ties, "Game") %></span> played.
-        </p>
-        <% end %>
-    </div>
+  <div class="jumbotron">
+    <h1 style="text-align:center">
+      All Time High Scores
+    </h1>
+    <% @users.each.with_index do |user, index| %>
+      <p>
+        <span style='font-weight:bold;'>Rank #<%= index + 1 %>:</span> <span style='font-weight:bold;color:red;'><%= user.username %></span> has won <span style='font-weight:bold;color:blue;'><%= pluralize(user.win, "Game") %></span>
+        out of <span style='font-weight:bold;color:blue;'><%= pluralize(user.win + user.losses + user.ties, "Game") %></span> played.
+      </p>
+    <% end %>
+  </div>
 </div>
