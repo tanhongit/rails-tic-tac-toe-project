@@ -208,7 +208,7 @@
           if (result == 'tie') {
               resultText.innerHTML = 'Tie!';
           } else {
-              resultText.innerHTML = `${result} Win!`;
+              resultText.innerHTML = `<span style='color:red;font-weight:bold;'>${result} Win!</span>`;
           }
           setScore(result);
       }
