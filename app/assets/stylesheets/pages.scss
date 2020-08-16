@@ -40,13 +40,13 @@ h1 {
     line-height: 42px;
     padding    : 0;
     border     : none;
-    background : rgb(255, 27, 0);
+    background : rgb(21, 201, 15);
 
-    background: linear-gradient(0deg, rgba(255, 27, 0, 1) 0%, rgba(251, 75, 2, 1) 100%);
+    background: linear-gradient(0deg, rgb(38, 182, 25) 0%, rgb(51, 167, 28) 100%);
 }
 
 .btn-5:hover {
-    color          : #f0094a;
+    color          : #1e8d08;
     background     : transparent;
     box-shadow     : none;
     text-decoration: none;
@@ -60,7 +60,7 @@ h1 {
     right     : 0;
     height    : 2px;
     width     : 0;
-    background: #f0094a;
+    background: #1e8d08;
     box-shadow:
         -1px -1px 5px 0px #fff,
         7px 7px 20px 0px #0003,
