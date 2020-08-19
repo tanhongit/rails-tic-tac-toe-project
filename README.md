@@ -124,3 +124,5 @@ Now go to http://localhost:3000
 #### Invincible mode.
 
 ![Image](https://imgur.com/g7iaUkU.png)
+
+_**Read more:**_ Tic Tac Toe Invincible with Javascript, HTML, CSS : https://github.com/TanHongIT/JavaScript-Tic-Tac-Toe-Project
