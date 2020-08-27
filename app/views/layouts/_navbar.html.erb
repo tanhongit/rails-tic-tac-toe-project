@@ -1,23 +1,23 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
   <%= link_to "Tic Tac Toe", root_path, class:'navbar-brand'%>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
   </button>
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
+      <li class="nav-item <%= active(root_path)%>">
         <%= link_to "Home", root_path, class:'nav-link' %>
       </li>
-      <li class="nav-item">
+      <li class="nav-item <%= active(game_path)%>">
         <%= link_to "Play Rank AI", game_path, class:'nav-link' %>
       </li>
-      <li class="nav-item">
+      <li class="nav-item <%= active(hiscores_path)%>">
         <%= link_to "Hiscores Rank AI", hiscores_path, class:'nav-link' %>
       </li>
-      <li class="nav-item">
+      <li class="nav-item <%= active(twoplayers_path)%>">
         <%= link_to "Two players", twoplayers_path, class:'nav-link' %>
       </li>
-      <li class="nav-item">
+      <li class="nav-item <%= active(invincible_path)%>">
        <%= link_to "Invincible AI Game!", invincible_path, class:'nav-link  ' %>
       </li>
     </ul>
