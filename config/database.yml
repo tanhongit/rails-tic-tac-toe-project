@@ -12,6 +12,11 @@ default: &default
   password: 1974
   host: localhost
 
+# tutorial for ubuntu linux:
+# sudo -u postgres psql
+# create user "railstictactoe" with password '1234';  
+# create database "railstictactoe" owner "railstictactoe"; 
+
 development:
   <<: *default
   database: railstictactoe
