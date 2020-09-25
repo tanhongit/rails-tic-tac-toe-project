@@ -255,7 +255,7 @@
       }
       formData.append("authenticity_token", "<%= form_authenticity_token %>");
       var request = new XMLHttpRequest();
-      request.open("POST", "https://railstictactoe.herokuapp.com/played"); //Change your host link, ex: http://localhost:3000/played
+      request.open("POST", "http://localhost:3000/played"); //Change your host link, ex: http://localhost:3000/played
       request.send(formData);
   }
 </script>
